@@ -135,7 +135,7 @@ def remove_objects(client: ServiceResource, bucket_name: str, *objects) -> dict:
     """
     删除对象
     """
-    obj_list = list(map(lambda x: {"Key": x}, objects))
+    obj_list = list(map(lambda x: {"Key": x}, filter(lambda o: o, objects)))
     return client.Bucket(bucket_name).delete_objects(Delete={"Objects": obj_list, "Quiet": True})
 
 

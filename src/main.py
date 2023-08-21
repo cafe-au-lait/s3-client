@@ -27,63 +27,64 @@ if __package__ == "":
 
 
 @app.command()
-def create_bucket(bucket_name: str, region: str = None):
+def create_bucket(bucket: str, region: str = None):
     """
     创建桶
-    :param bucket_name: 桶
+    :param bucket: 桶
     :param region: 区域
     :return:
     """
-    print(S3_CLIENT["create_bucket"](oss_resource, bucket_name, region))
+    print(S3_CLIENT["create_bucket"](client=oss_resource, bucket_name=bucket, region=region))
 
 
 @app.command()
-def delete_bucket(bucket_name: str, force: bool = False):
+def delete_bucket(bucket: str, force: bool = False):
     """
     删除桶
-    :param bucket_name: 桶
+    :param bucket: 桶
     :param force: 强制
     :return:
     """
-    print(S3_CLIENT["delete_bucket"](oss_resource, bucket_name, force))
+    print(S3_CLIENT["delete_bucket"](client=oss_resource, bucket_name=bucket, force=force))
 
 
 @app.command()
-def exists_bucket(bucket_name: str) -> bool:
+def exists_bucket(bucket: str) -> bool:
     """
     桶是否存在
-    :param bucket_name: 桶
+    :param bucket: 桶
     :return:
     """
-    print(S3_CLIENT["exists_bucket"](oss_resource, bucket_name))
+    print(S3_CLIENT["exists_bucket"](client=oss_resource, bucket_name=bucket))
 
 
 @app.command()
-def list_objects(bucket_name: str = settings.oss_bucket,
+def list_objects(bucket: str = settings.oss_bucket,
                  prefix: str = '',
-                 start_after: str = ''):
+                 start: str = ''):
     """
     对象列表
-    :param bucket_name: 桶
+    :param bucket: 桶
     :param prefix: 前缀
-    :param start_after: 起始对象名称
+    :param start: 起始对象名称
     :return:
     """
-    obj_list = S3_CLIENT["list_objects"](oss_resource, bucket_name, prefix, start_after)
+    obj_list = S3_CLIENT["list_objects"](client=oss_resource, bucket_name=bucket, 
+                                        prefix=prefix, start_after=start)
     for obj in obj_list:
         print(obj.key)
 
 
 @app.command()
-def exists_object(object_name: str,
-                  bucket_name: str = settings.oss_bucket):
+def exists_object(object: str,
+                  bucket: str = settings.oss_bucket):
     """
     查询对象状态
-    :param bucket_name: 桶
-    :param object_name: 对象名称
+    :param bucket: 桶
+    :param object: 对象名称
     :return:
     """
-    print(S3_CLIENT["exists_object"](oss_resource, bucket_name, object_name))
+    print(S3_CLIENT["exists_object"](client=oss_resource, bucket_name=bucket, object_name=object))
 
 
 @app.command()
@@ -92,10 +93,10 @@ def remove_objects(obj1: str,
                    obj3: str = None,
                    obj4: str = None,
                    obj5: str = None,
-                   bucket_name: str = settings.oss_bucket, ):
+                   bucket: str = settings.oss_bucket, ):
     """
     删除对象
-    :param bucket_name: 桶
+    :param bucket: 桶
     :param obj1: 对象名称
     :param obj2: 对象名称
     :param obj3: 对象名称
@@ -103,109 +104,116 @@ def remove_objects(obj1: str,
     :param obj5: 对象名称
     :return:
     """
-    print(S3_CLIENT["remove_objects"](oss_resource, bucket_name, obj1, obj2, obj3, obj4, obj5))
+    print(S3_CLIENT["remove_objects"](client=oss_resource, bucket_name=bucket,
+                                    objects=[obj1, obj2, obj3, obj4, obj5]))
 
 
 @app.command()
-def get_data(object_name: str,
-             bucket_name: str = settings.oss_bucket,
+def get_data(object: str,
+             bucket: str = settings.oss_bucket,
              offset: int = 0, length: int = 0):
     """
     获取对象数据
-    :param bucket_name: 桶
-    :param object_name: 对象名称
+    :param bucket: 桶
+    :param object: 对象名称
     :param offset: 起始位置
     :param length: 长度
     :return:
     """
-    data = S3_CLIENT["get_data"](oss_resource, bucket_name, object_name, offset, length)
+    data = S3_CLIENT["get_data"](client=oss_resource, bucket_name=bucket, object_name=object,
+                                 offset=offset, length=length)
     if not data:
         print('Object Not Found')
     print(data.decode('utf-8'))
 
 
 @app.command()
-def get_json(object_name: str,
-             bucket_name: str = settings.oss_bucket):
+def get_json(object: str,
+             bucket: str = settings.oss_bucket):
     """
     获取json数据
-    :param bucket_name: 桶
-    :param object_name: 对象名称
+    :param bucket: 桶
+    :param object: 对象名称
     :return:
     """
-    print(S3_CLIENT["get_json"](oss_resource, bucket_name, object_name))
+    print(S3_CLIENT["get_json"](client=oss_resource, bucket_name=bucket, object_name=object))
 
 
 @app.command()
-def upload_file(object_name: str,
-                file_path: str,
-                bucket_name: str = settings.oss_bucket,
-                content_type: str = typer.Option("application/octet-stream"), ):
+def upload_file(object: str,
+                path: str,
+                bucket: str = settings.oss_bucket,
+                type: str = typer.Option("application/octet-stream"), ):
     """
     上传文件
-    :param bucket_name: 桶
-    :param object_name: 对象名称
-    :param file_path: 文件路径
-    :param content_type: 类型
+    :param bucket: 桶
+    :param object: 对象名称
+    :param path: 文件路径
+    :param type: 类型
     :return:
     """
-    print(S3_CLIENT["upload_file"](oss_resource, bucket_name, object_name, file_path, content_type))
+    print(S3_CLIENT["upload_file"](client=oss_resource, bucket_name=bucket,
+                                     object_name=object, file_path=path, content_type=type))
 
 
 @app.command()
-def download_file(object_name: str,
-                  file_path: str = None,
-                  bucket_name: str = settings.oss_bucket, ):
+def download_file(object: str,
+                  path: str = None,
+                  bucket: str = settings.oss_bucket, ):
     """
     下载文件
-    :param bucket_name: 桶
-    :param object_name: 对象名称
-    :param file_path: 文件路径
+    :param bucket: 桶
+    :param object: 对象名称
+    :param path: 文件路径
     :return:
     """
-    print(S3_CLIENT["download_file"](oss_resource, bucket_name, object_name, file_path))
+    print(S3_CLIENT["download_file"](client=oss_resource, bucket_name=bucket,
+                                     object_name=object, file_path=path))
 
 
 @app.command()
-def get_upload_url(object_name: str,
-                   bucket_name: str = settings.oss_bucket,
+def get_upload_url(object: str,
+                   bucket: str = settings.oss_bucket,
                    seconds: int = 3600):
     """
     获取上传文件的URL
-    :param bucket_name: 桶
-    :param object_name: 对象名称
+    :param bucket: 桶
+    :param object: 对象名称
     :param seconds: 有效时长(秒)
     :return:
     """
-    print(S3_CLIENT["get_upload_url"](oss_resource, bucket_name, object_name, seconds))
+    print(S3_CLIENT["get_upload_url"](client=oss_resource, bucket_name=bucket,
+                                     object_name=object, seconds=seconds))
 
 
 @app.command()
-def get_download_url(object_name: str,
-                     bucket_name: str = settings.oss_bucket,
+def get_download_url(object: str,
+                     bucket: str = settings.oss_bucket,
                      seconds: int = 3600):
     """
     获取下载文件的URL
-    :param bucket_name: 桶
-    :param object_name: 对象名称
+    :param bucket: 桶
+    :param object: 对象名称
     :param seconds: 有效时长(秒)
     :return:
     """
-    print(S3_CLIENT["get_download_url"](oss_resource, bucket_name, object_name, seconds))
+    print(S3_CLIENT["get_download_url"](client=oss_resource, bucket_name=bucket,
+                                     object_name=object, seconds=seconds))
 
 
 @app.command()
-def upload_folder(from_path: str,
-                  bucket_name: str = settings.oss_bucket,
+def upload_folder(path: str,
+                  bucket: str = settings.oss_bucket,
                   target: str = None):
     """
     上传文件夹
-    :param bucket_name: 桶
-    :param from_path: 本地文件夹路径
+    :param bucket: 桶
+    :param path: 本地文件夹路径
     :param target: 目标文件夹名称
     :return:
     """
-    print(S3_CLIENT["upload_folder"](oss_resource, bucket_name, from_path, target))
+    print(S3_CLIENT["upload_folder"](client=oss_resource, bucket_name=bucket,
+                                     path=path, target=target))
 
 
 if __name__ == '__main__':
