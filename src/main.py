@@ -118,7 +118,10 @@ def get_data(object_name: str,
     :param length: 长度
     :return:
     """
-    print(S3_CLIENT["get_data"](oss_resource, bucket_name, object_name, offset, length).encode())
+    data = S3_CLIENT["get_data"](oss_resource, bucket_name, object_name, offset, length)
+    if not data:
+        print('Object Not Found')
+    print(data.decode('utf-8'))
 
 
 @app.command()

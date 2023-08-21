@@ -194,6 +194,8 @@ def get_json(client: ServiceResource, bucket_name: str, object_name: str, **kwar
     获取json数据
     """
     data = get_data(client=client, bucket_name=bucket_name, object_name=object_name, )
+    if not data:
+        return None
     return json.loads(data.decode('utf-8'))
 
 
