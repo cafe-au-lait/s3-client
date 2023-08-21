@@ -22,8 +22,8 @@ if __package__ == "":
     # first dirname call strips of '/__main__.py', second strips off '/pip'
     # Resulting path is the name of the wheel itself
     # Add that to sys.path so we can import pip
-    path = os.path.dirname(os.path.dirname(__file__))
-    sys.path.insert(0, path)
+    _path = os.path.dirname(os.path.dirname(__file__))
+    sys.path.insert(0, _path)
 
 
 @app.command()
@@ -69,22 +69,22 @@ def list_objects(bucket: str = settings.oss_bucket,
     :param start: 起始对象名称
     :return:
     """
-    obj_list = S3_CLIENT["list_objects"](client=oss_resource, bucket_name=bucket, 
-                                        prefix=prefix, start_after=start)
+    obj_list = S3_CLIENT["list_objects"](client=oss_resource, bucket_name=bucket,
+                                         prefix=prefix, start_after=start)
     for obj in obj_list:
         print(obj.key)
 
 
 @app.command()
-def exists_object(object: str,
+def exists_object(object_name: str,
                   bucket: str = settings.oss_bucket):
     """
     查询对象状态
     :param bucket: 桶
-    :param object: 对象名称
+    :param object_name: 对象名称
     :return:
     """
-    print(S3_CLIENT["exists_object"](client=oss_resource, bucket_name=bucket, object_name=object))
+    print(S3_CLIENT["exists_object"](client=oss_resource, bucket_name=bucket, object_name=object_name))
 
 
 @app.command()
@@ -105,22 +105,22 @@ def remove_objects(obj1: str,
     :return:
     """
     print(S3_CLIENT["remove_objects"](client=oss_resource, bucket_name=bucket,
-                                    objects=[obj1, obj2, obj3, obj4, obj5]))
+                                      objects=[obj1, obj2, obj3, obj4, obj5]))
 
 
 @app.command()
-def get_data(object: str,
+def get_data(object_name: str,
              bucket: str = settings.oss_bucket,
              offset: int = 0, length: int = 0):
     """
     获取对象数据
     :param bucket: 桶
-    :param object: 对象名称
+    :param object_name: 对象名称
     :param offset: 起始位置
     :param length: 长度
     :return:
     """
-    data = S3_CLIENT["get_data"](client=oss_resource, bucket_name=bucket, object_name=object,
+    data = S3_CLIENT["get_data"](client=oss_resource, bucket_name=bucket, object_name=object_name,
                                  offset=offset, length=length)
     if not data:
         print('Object Not Found')
@@ -128,77 +128,77 @@ def get_data(object: str,
 
 
 @app.command()
-def get_json(object: str,
+def get_json(object_name: str,
              bucket: str = settings.oss_bucket):
     """
     获取json数据
     :param bucket: 桶
-    :param object: 对象名称
+    :param object_name: 对象名称
     :return:
     """
-    print(S3_CLIENT["get_json"](client=oss_resource, bucket_name=bucket, object_name=object))
+    print(S3_CLIENT["get_json"](client=oss_resource, bucket_name=bucket, object_name=object_name))
 
 
 @app.command()
-def upload_file(object: str,
+def upload_file(object_name: str,
                 path: str,
                 bucket: str = settings.oss_bucket,
-                type: str = typer.Option("application/octet-stream"), ):
+                content_type: str = typer.Option("application/octet-stream"), ):
     """
     上传文件
     :param bucket: 桶
-    :param object: 对象名称
+    :param object_name: 对象名称
     :param path: 文件路径
-    :param type: 类型
+    :param content_type: 类型
     :return:
     """
     print(S3_CLIENT["upload_file"](client=oss_resource, bucket_name=bucket,
-                                     object_name=object, file_path=path, content_type=type))
+                                   object_name=object_name, file_path=path, content_type=content_type))
 
 
 @app.command()
-def download_file(object: str,
+def download_file(object_name: str,
                   path: str = None,
                   bucket: str = settings.oss_bucket, ):
     """
     下载文件
     :param bucket: 桶
-    :param object: 对象名称
+    :param object_name: 对象名称
     :param path: 文件路径
     :return:
     """
     print(S3_CLIENT["download_file"](client=oss_resource, bucket_name=bucket,
-                                     object_name=object, file_path=path))
+                                     object_name=object_name, file_path=path))
 
 
 @app.command()
-def get_upload_url(object: str,
+def get_upload_url(object_name: str,
                    bucket: str = settings.oss_bucket,
                    seconds: int = 3600):
     """
     获取上传文件的URL
     :param bucket: 桶
-    :param object: 对象名称
+    :param object_name: 对象名称
     :param seconds: 有效时长(秒)
     :return:
     """
     print(S3_CLIENT["get_upload_url"](client=oss_resource, bucket_name=bucket,
-                                     object_name=object, seconds=seconds))
+                                      object_name=object_name, seconds=seconds))
 
 
 @app.command()
-def get_download_url(object: str,
+def get_download_url(object_name: str,
                      bucket: str = settings.oss_bucket,
                      seconds: int = 3600):
     """
     获取下载文件的URL
     :param bucket: 桶
-    :param object: 对象名称
+    :param object_name: 对象名称
     :param seconds: 有效时长(秒)
     :return:
     """
     print(S3_CLIENT["get_download_url"](client=oss_resource, bucket_name=bucket,
-                                     object_name=object, seconds=seconds))
+                                        object_name=object_name, seconds=seconds))
 
 
 @app.command()
