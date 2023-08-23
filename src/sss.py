@@ -308,12 +308,14 @@ def __is_success__(resp: dict):
 oss_resource = get_resource(endpoint=settings.oss_endpoint,
                             access_key=settings.oss_access_key,
                             secret_key=settings.oss_secret_key,
-                            region=settings.oss_region)
+                            region=settings.oss_region,
+                            secure=settings.oss_secure)
 
 oss_client = get_client(endpoint=settings.oss_endpoint,
                         access_key=settings.oss_access_key,
                         secret_key=settings.oss_secret_key,
-                        region=settings.oss_region)
+                        region=settings.oss_region,
+                        secure=settings.oss_secure)
 
 S3_CLIENT = {
     "create_bucket": create_bucket,

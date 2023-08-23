@@ -213,7 +213,7 @@ def upload_folder(path: str,
     :return:
     """
     print(S3_CLIENT["upload_folder"](client=oss_resource, bucket_name=bucket,
-                                     path=path, target=target))
+                                     from_path=path, target=target))
 
 
 if __name__ == '__main__':
