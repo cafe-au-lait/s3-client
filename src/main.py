@@ -59,9 +59,7 @@ def exists_bucket(bucket: str) -> bool:
 
 
 @app.command()
-def list_objects(bucket: str = settings.oss_bucket,
-                 prefix: str = '',
-                 start: str = ''):
+def list_objects(bucket: str = settings.oss_bucket, prefix: str = '', start: str = ''):
     """
     对象列表
     :param bucket: 桶
@@ -76,8 +74,7 @@ def list_objects(bucket: str = settings.oss_bucket,
 
 
 @app.command()
-def exists_object(object_name: str,
-                  bucket: str = settings.oss_bucket):
+def exists_object(object_name: str, bucket: str = settings.oss_bucket):
     """
     查询对象状态
     :param bucket: 桶
@@ -88,30 +85,18 @@ def exists_object(object_name: str,
 
 
 @app.command()
-def remove_objects(obj1: str,
-                   obj2: str = None,
-                   obj3: str = None,
-                   obj4: str = None,
-                   obj5: str = None,
-                   bucket: str = settings.oss_bucket, ):
+def remove_object(object_name: str, bucket: str = settings.oss_bucket, ):
     """
     删除对象
     :param bucket: 桶
-    :param obj1: 对象名称
-    :param obj2: 对象名称
-    :param obj3: 对象名称
-    :param obj4: 对象名称
-    :param obj5: 对象名称
+    :param object_name: 对象名称
     :return:
     """
-    print(S3_CLIENT["remove_objects"](client=oss_resource, bucket_name=bucket,
-                                      objects=[obj1, obj2, obj3, obj4, obj5]))
+    print(S3_CLIENT["remove_objects"](client=oss_resource, bucket_name=bucket, objects=[object_name]))
 
 
 @app.command()
-def get_data(object_name: str,
-             bucket: str = settings.oss_bucket,
-             offset: int = 0, length: int = 0):
+def get_data(object_name: str, bucket: str = settings.oss_bucket, offset: int = 0, length: int = 0):
     """
     获取对象数据
     :param bucket: 桶
@@ -128,8 +113,7 @@ def get_data(object_name: str,
 
 
 @app.command()
-def get_json(object_name: str,
-             bucket: str = settings.oss_bucket):
+def get_json(object_name: str, bucket: str = settings.oss_bucket):
     """
     获取json数据
     :param bucket: 桶
@@ -140,8 +124,7 @@ def get_json(object_name: str,
 
 
 @app.command()
-def upload_file(object_name: str,
-                path: str,
+def upload_file(object_name: str, path: str,
                 bucket: str = settings.oss_bucket,
                 content_type: str = typer.Option("application/octet-stream"), ):
     """
@@ -157,9 +140,7 @@ def upload_file(object_name: str,
 
 
 @app.command()
-def download_file(object_name: str,
-                  path: str = None,
-                  bucket: str = settings.oss_bucket, ):
+def download_file(object_name: str, path: str = None, bucket: str = settings.oss_bucket, ):
     """
     下载文件
     :param bucket: 桶
@@ -172,9 +153,7 @@ def download_file(object_name: str,
 
 
 @app.command()
-def get_upload_url(object_name: str,
-                   bucket: str = settings.oss_bucket,
-                   seconds: int = 3600):
+def get_upload_url(object_name: str, bucket: str = settings.oss_bucket, seconds: int = 3600):
     """
     获取上传文件的URL
     :param bucket: 桶
@@ -187,9 +166,7 @@ def get_upload_url(object_name: str,
 
 
 @app.command()
-def get_download_url(object_name: str,
-                     bucket: str = settings.oss_bucket,
-                     seconds: int = 3600):
+def get_download_url(object_name: str, bucket: str = settings.oss_bucket, seconds: int = 3600):
     """
     获取下载文件的URL
     :param bucket: 桶
@@ -202,9 +179,7 @@ def get_download_url(object_name: str,
 
 
 @app.command()
-def upload_folder(path: str,
-                  bucket: str = settings.oss_bucket,
-                  target: str = None):
+def upload_folder(path: str, bucket: str = settings.oss_bucket, target: str = None):
     """
     上传文件夹
     :param bucket: 桶

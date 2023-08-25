@@ -92,16 +92,16 @@ def exists_bucket(client: ServiceResource, bucket_name: str) -> bool:
         raise
 
 
-def list_objects(client: ServiceResource, bucket_name: str, prefix: str = '', start_after: str = '',
-                 **kwargs) -> Collection:
+def list_objects(client: ServiceResource, bucket_name: str,
+                 prefix: str = '', start_after: str = '', **kwargs) -> Collection:
     """
     对象列表
     """
     return client.Bucket(bucket_name).objects.filter(Prefix=prefix, Marker=start_after)
 
 
-def put_object(client: ServiceResource, bucket_name: str, object_name: str, data=None,
-               length: int = 0, content_type: str = '', content_md5: str = '',
+def put_object(client: ServiceResource, bucket_name: str, object_name: str,
+               data=None, length: int = 0, content_type: str = '', content_md5: str = '',
                **kwargs):
     """
     上传对象
@@ -131,7 +131,7 @@ def exists_object(client: ServiceResource, bucket_name: str, object_name: str, *
         raise
 
 
-def remove_objects(client: ServiceResource, bucket_name: str, *objects) -> dict:
+def remove_objects(client: ServiceResource, bucket_name: str, objects: list) -> dict:
     """
     删除对象
     """
